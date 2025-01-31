@@ -1,3 +1,4 @@
+from time import strptime
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
@@ -15,18 +16,30 @@ class Market(models.Model):
     unit=models.PositiveSmallIntegerField()
     rate=models.DecimalField(max_digits= 3,decimal_places=1)
     price= models.DecimalField(max_digits=4,decimal_places=2)
-    order= models.IntegerField(blank=True, null=True, default=0)
     discount= models.IntegerField(validators=[MaxValueValidator(99)], default=0)
     selling= models.IntegerField(default=0)
-
+    time= models.TimeField(auto_now=True)
+    
+    @property
+    def latest(self):
+        print(f"Time: {self.time}, Hour: {self.time.hour}, Latest: {self.time.hour >= 0}")
+        return self.time.hour >= 0  # Check if hour is greater than or equal to 0
     def __str__(self):
         return str(self.name)
     
+class Cart(models.Model):
+    product= models.ForeignKey(Market, on_delete=models.PROTECT, blank=True, null=True)
+    number=models.IntegerField()
+    price= models.IntegerField()
+    
+    def __str__(self):
+        return str(self.product)
+
 class Customers(models.Model):
     name= models.ForeignKey(User, on_delete=models.PROTECT,max_length=25)
     email= models.EmailField(max_length=25)
     subscribe= models.BooleanField(default=False)
-    purchase= models.ManyToManyField(Market)
+    cart= models.ManyToManyField(Cart)
     
     def __str__(self):
         return str(self.name)
