@@ -15,6 +15,6 @@ def landpage(request):
         user.save()
         cart.save()
         return redirect('home:landpage')
-    total_price = Cart.objects.aggregate(total_price=Sum('price'))['total_price'] or 0 or 0
+    total_price = Cart.objects.aggregate(total_price=Sum('price'))['total_price'] or 0
     context= {'prod': prod, 'user': user, 'carts': carts, 'total_price': total_price}
     return render(request, 'home/home.html', context)
