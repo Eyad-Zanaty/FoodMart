@@ -837,7 +837,7 @@
           <div class="col-md-12">
             <div class="products-carousel swiper">
               {% for p in prod %}
-              {% if p.time.hour < 24 %}
+              {% if p.time.hour < 2 %}
               <div class="swiper-wrapper">
                 <form method="post">
                   {% csrf_token %}
