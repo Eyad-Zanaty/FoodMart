@@ -8,7 +8,7 @@ from .form import SubscriptionForm
 
 def landpage(request):
     prod= Market.objects.all()
-    user= Customers.objects.get(name= request.user)
+    user= Customers.objects.get(name=request.user)
     carts= Cart.objects.all()
     total_price = Cart.objects.aggregate(total_price=Sum('price'))['total_price'] or 0
     form = SubscriptionForm(instance=user)
@@ -31,8 +31,8 @@ def landpage(request):
             send_mail(
                 'Discount',
                 f'{Name} has got the discount',
-                [settings.EMAIL_HOST_USER],
                 email,
+                [settings.EMAIL_HOST_USER],
             )
             return redirect('home:landpage')
         else:
