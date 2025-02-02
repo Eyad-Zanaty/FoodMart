@@ -1,4 +1,3 @@
-from time import strptime
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
@@ -22,8 +21,8 @@ class Market(models.Model):
     
     @property
     def latest(self):
-        print(f"Time: {self.time}, Hour: {self.time.hour}, Latest: {self.time.hour >= 0}")
-        return self.time.hour >= 0  # Check if hour is greater than or equal to 0
+        return self.time.hour
+    
     def __str__(self):
         return str(self.name)
     
