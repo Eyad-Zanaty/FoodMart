@@ -10,17 +10,26 @@ def landpage(request):
     prod= Market.objects.all()
     user= Customers.objects.get(name=request.user)
     carts= Cart.objects.all()
-    total_price = Cart.objects.aggregate(total_price=Sum('price'))['total_price'] or 0
+    total_price = Cart.objects.aggregate(total_price=Sum('cash'))['total_price'] or 0
+
     form = SubscriptionForm(instance=user)
         
-    if request.method== 'POST' and "add_to_cart" in request.POST:
-        product_id= request.POST.get("product_id")
-        quantity = request.POST.get("quantity", 1) 
-        products= Market.objects.get(id= product_id)
-        cart = Cart.objects.create(product=products, number=quantity, price= float(products.price) * int(quantity))
-        user.save()
-        cart.save()
+    if request.method == 'POST' and "add_to_cart" in request.POST:
+        product_id = request.POST.get("product_id")
     
+        if product_id:  
+            product = Market.objects.filter(id=product_id).first()
+            
+            if product:
+                quantity = int(request.POST.get("quantity"))
+                
+                cart = Cart.objects.create(
+                    product=product, 
+                    number=quantity, 
+                    cash= product.price * int(quantity)
+                )
+                cart.save()
+                return redirect('home:landpage')
     
     if request.method== 'POST' and 'subscribe' in request.POST:
         form = SubscriptionForm(request.POST, instance=user)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.contrib.auth.models import User
+from datetime import datetime
 # Create your models here.
 
 market_kind= [
@@ -21,7 +22,7 @@ class Market(models.Model):
     
     @property
     def latest(self):
-        return self.time.hour
+        return self.time.hour < 18
     
     def __str__(self):
         return str(self.name)
@@ -29,7 +30,7 @@ class Market(models.Model):
 class Cart(models.Model):
     product= models.ForeignKey(Market, on_delete=models.PROTECT, blank=True, null=True)
     number=models.IntegerField()
-    price= models.IntegerField()
+    cash= models.DecimalField(max_digits= 4,decimal_places= 2)
     
     def __str__(self):
         return str(self.product)
