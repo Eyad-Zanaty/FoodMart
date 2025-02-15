@@ -22,7 +22,7 @@ class Market(models.Model):
     
     @property
     def latest(self):
-        return self.time.hour < 18
+        return self.time.hour == 23 
     
     def __str__(self):
         return str(self.name)
